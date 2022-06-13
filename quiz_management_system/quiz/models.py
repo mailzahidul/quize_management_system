@@ -2,7 +2,17 @@ from django.db import models
 
 # Create your models here.
 
-class Quiz(models.Model):
+class Common(models.Model):
+    active = models.BooleanField(default=True)
+
+class Subject(models.Model):
+    name = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.name
+
+class Quiz(Common):
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     question = models.CharField(max_length=200, null=True)
     option_1 = models.CharField(max_length=200, null=True)
     option_2 = models.CharField(max_length=200, null=True)

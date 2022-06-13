@@ -1,10 +1,20 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from .forms import Quizform
+from .models import Quiz
 # Create your views here.
 
+@login_required
 def home(request):
-
     return render(request, 'index.html')
+
+
+@login_required
+def quiz_list(request):
+    context={}
+    quizes = Quiz.objects.all()
+    context['quizes'] = quizes
+    return render(request, 'quiz/quiz_list.html', context)
 
 
 # Create your views here.
@@ -43,15 +53,7 @@ def home(request):
 #         }
 #         return render(request, 'Quiz/home.html', context)
 
+@login_required
 def add_quiz(request):
-    if request.user.is_staff:
-        form = Quizform()
-        if (request.method == 'POST'):
-            form = Quizform(request.POST)
-            if (form.is_valid()):
-                form.save()
-                return redirect('/')
-        context = {'form': form}
-        return render(request, 'quiz/add_quiz.html', context)
-    else:
-        return redirect('home')
+   context={}
+   return render(request, 'quiz/add_quiz.html', context)

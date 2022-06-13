@@ -6,4 +6,4 @@ from django.contrib.auth.models import User
 class createuserform(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = "__all__"

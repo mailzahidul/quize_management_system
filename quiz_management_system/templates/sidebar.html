@@ -4,8 +4,20 @@
                 <ul>
                     <li class="menu-title"><span>Main</span></li>
                     <li class="active">
-                        <a href="index.html"><i data-feather="home"></i> <span>Dashboard</span></a>
+                        <a href="{% url 'home' %}"><i data-feather="home"></i> <span>Dashboard</span></a>
                     </li>
+                    <li class="active">
+                        <a href="{% url 'add_quiz' %}"><i data-feather="home"></i> <span>Add Quiz</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'quiz_list' %}"><i data-feather="home"></i> <span>Quiz List</span></a>
+                    </li>
+                    <p>below menu are dummy data</p>
+                    <p>below menu are dummy data</p>
+                    <p>below menu are dummy data</p>
+                    <p>below menu are dummy data</p>
+                    <p>below menu are dummy data</p>
+                    <p>below menu are dummy data</p>
                     <li>
                         <a href="customers.html"><i data-feather="users"></i> <span>Customers</span></a>
                     </li>
