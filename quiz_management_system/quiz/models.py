@@ -13,12 +13,12 @@ class Subject(models.Model):
 
 class Quiz(Common):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    question = models.CharField(max_length=200, null=True)
-    option_1 = models.CharField(max_length=200, null=True)
-    option_2 = models.CharField(max_length=200, null=True)
-    option_3 = models.CharField(max_length=200, null=True)
-    option_4 = models.CharField(max_length=200, null=True)
-    answer = models.CharField(max_length=200, null=True)
+    question = models.CharField(max_length=250, null=True)
+    option_1 = models.CharField(max_length=100, null=True)
+    option_2 = models.CharField(max_length=100, null=True)
+    option_3 = models.CharField(max_length=100, null=True)
+    option_4 = models.CharField(max_length=100, null=True)
+    answer = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.question
