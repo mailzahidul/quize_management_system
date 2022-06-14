@@ -56,4 +56,33 @@ def quiz_list(request):
 @login_required
 def add_quiz(request):
    context={}
-   return render(request, 'quiz/add_quiz.html', context)
+   if request.POST:
+       print(request.POST, "All Input Answer")
+       questions = Quiz.objects.all()
+       total_score = 0
+       wrong_answer = 0
+       correct_answer = 0
+       total = 0
+       for q in questions:
+           total += 1
+           print(request.POST.get(q.question), "Select option")
+           print(q.answer, "Answer")
+           print()
+           if q.answer == request.POST.get(q.question):
+               total_score += 10
+               correct_answer += 1
+           else:
+               wrong_answer += 1
+       percent = total_score / (total * 10) * 100
+       context['score'] = total_score
+       context['time'] = request.POST.get('timer')
+       context['correct'] = correct_answer
+       context['wrong'] = wrong_answer
+       context['total'] = total
+       context['percent'] = percent
+
+       return render(request, 'quiz/result.html', context)
+   else:
+       questions = Quiz.objects.filter(active=True)
+       context['questions'] = questions
+       return render(request, 'quiz/quiz_test.html', context)
