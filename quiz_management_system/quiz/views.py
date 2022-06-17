@@ -1,19 +1,27 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User, Group
 from .forms import Quizform
 from .models import Quiz
+from user_admin.models import User as UUser
+from user_admin.forms import CreateUserProfileForm
 # Create your views here.
 
 @login_required
 def home(request):
+    l = Group.objects.all()
+    print(l, "DFDFDFFD")
     return render(request, 'index.html')
 
 
 @login_required
 def quiz_list(request):
     context={}
+    forms = CreateUserProfileForm()
+
     quizes = Quiz.objects.all()
     context['quizes'] = quizes
+    context['forms'] = forms
     return render(request, 'quiz/quiz_list.html', context)
 
 @login_required

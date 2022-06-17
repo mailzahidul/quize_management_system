@@ -72,6 +72,11 @@
                 </div>
             </div>
             <div class="row">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ forms.as_p }}
+                    <button>Save</button>
+                </form>
                 <div class="col-sm-12">
                     <div class="card card-table">
                         <div class="card-body">

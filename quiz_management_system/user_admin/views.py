@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
-from django.contrib.auth.models import User
-from .forms import createuserform
-
+from django.contrib.auth.models import User, Group
 # Create your views here.
 
 
@@ -13,7 +11,6 @@ def user_registration(request):
         return redirect('home')
 
     if request.POST:
-        print("POST")
         fname = request.POST.get('first_name')
         lname = request.POST.get('last_name')
         email = request.POST.get('email')
