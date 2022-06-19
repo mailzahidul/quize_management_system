@@ -2,26 +2,27 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from .forms import Quizform
-from .models import Quiz
+from .models import Quiz, Course, Semester, Result
 from user_admin.models import User as UUser
 from user_admin.forms import CreateUserProfileForm
 # Create your views here.
 
 @login_required
 def home(request):
+    context={}
+    courses = Course.objects.filter(active=True)
+    print(courses)
+    context['courses'] = courses
     l = Group.objects.all()
     print(l, "DFDFDFFD")
-    return render(request, 'index.html')
+    return render(request, 'index.html', context)
 
 
 @login_required
 def quiz_list(request):
     context={}
-    forms = CreateUserProfileForm()
-
     quizes = Quiz.objects.all()
     context['quizes'] = quizes
-    context['forms'] = forms
     return render(request, 'quiz/quiz_list.html', context)
 
 @login_required
@@ -59,11 +60,14 @@ def quiz_test(request):
        return render(request, 'quiz/quiz_test.html', context)
 
 def add_quiz(request):
+    context={}
     forms = Quizform()
+    courses = Course.objects.filter(active=True)
+    context['courses'] = courses
     if request.POST:
         forms = Quizform(request.POST)
         if forms.is_valid():
             forms.save()
             return redirect('quiz_list')
-    context={'forms':forms}
+    context['forms']=forms
     return render(request, 'quiz/add_quiz.html', context)

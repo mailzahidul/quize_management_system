@@ -6,7 +6,7 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">Employee</h3>
+                        <h3 class="page-title">Quiz List</h3>
                         <ul class="breadcrumb">
                             <li><a href="{% url 'home' %}">Dashboard / </a>
                             </li>
@@ -72,11 +72,6 @@
                 </div>
             </div>
             <div class="row">
-                <form action="" method="post">
-                    {% csrf_token %}
-                    {{ forms.as_p }}
-                    <button>Save</button>
-                </form>
                 <div class="col-sm-12">
                     <div class="card card-table">
                         <div class="card-body">
@@ -86,6 +81,7 @@
                                     <tr>
                                         <th>Questions</th>
                                         <th>Answer</th>
+                                        <th>Marks</th>
                                         <th>Active</th>
                                         <th class="text-right">Actions</th>
                                     </tr>
@@ -101,6 +97,9 @@
                                         </td>
                                         <td>
                                             <h2>{{ quiz.answer }}</h2>
+                                        </td>
+                                        <td>
+                                            <h2>{{ quiz.marks }}</h2>
                                         </td>
                                         <td>
                                             {{ quiz.active }}

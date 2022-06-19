@@ -11,7 +11,6 @@ class Semester(models.Model):
     semester_name = models.CharField(max_length=150)
     semester_year = models.CharField(max_length=150)
     create_date = models.DateField(auto_now_add=True)
-    created_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -23,7 +22,6 @@ class Course(models.Model):
     department_name = models.ForeignKey(Department, on_delete=models.CASCADE)
     semester_name = models.ForeignKey(Semester, on_delete=models.CASCADE, null=True)
     create_date = models.DateField(auto_now_add=True)
-    created_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
 
     def __str__(self):
