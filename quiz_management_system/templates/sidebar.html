@@ -11,7 +11,7 @@
                                 class="menu-arrow"></span></a>
                         <ul>
                             {% for course in courses %}
-                            <li><a href="invoices.html">{{ course.course_name }}</a></li>
+                            <li><a href="{% url 'quiz_test' course.id %}">{{ course.course_name }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -20,9 +20,6 @@
                     </li>
                     <li>
                         <a href="{% url 'add_quiz' %}"><i data-feather="home"></i> <span>Add Quiz</span></a>
-                    </li>
-                    <li>
-                        <a href="{% url 'quiz_test' %}"><i data-feather="home"></i> <span>Quiz Test</span></a>
                     </li>
                     <p>below menu are dummy data</p>
                     <p>below menu are dummy data</p>

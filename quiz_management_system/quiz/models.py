@@ -47,6 +47,7 @@ class Result(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     course_name = models.ForeignKey(Course, on_delete=models.CASCADE)
     marks = models.IntegerField()
+    exam_date = models.DateField(auto_now_add=True)
     comments = models.CharField(max_length=100, null=True)
 
     def __str__(self):

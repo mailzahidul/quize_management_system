@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from .forms import Quizform
 from .models import Quiz, Course, Semester, Result
+from user_admin.models import UserProfile
 from user_admin.models import User as UUser
 from user_admin.forms import CreateUserProfileForm
 # Create your views here.
@@ -11,10 +12,8 @@ from user_admin.forms import CreateUserProfileForm
 def home(request):
     context={}
     courses = Course.objects.filter(active=True)
-    print(courses)
     context['courses'] = courses
     l = Group.objects.all()
-    print(l, "DFDFDFFD")
     return render(request, 'index.html', context)
 
 
@@ -26,12 +25,18 @@ def quiz_list(request):
     return render(request, 'quiz/quiz_list.html', context)
 
 @login_required
-def quiz_test(request):
+def quiz_test(request, id):
    context={}
+   course = Course.objects.get(id=id)
+   quizs = Quiz.objects.filter(course_name=course)
+   context['questions'] = quizs
+
    if request.POST:
        print(request.POST, "All Input Answer")
-       questions = Quiz.objects.all()
-       total_score = 0
+       # questions = Quiz.objects.all()
+       course = Course.objects.get(id=id)
+       questions = Quiz.objects.filter(course_name=course)
+       total_marks = 0
        wrong_answer = 0
        correct_answer = 0
        total = 0
@@ -41,12 +46,15 @@ def quiz_test(request):
            print(q.answer, "Answer")
            print()
            if q.answer == request.POST.get(q.question):
-               total_score += 10
+               total_marks += q.marks
                correct_answer += 1
            else:
                wrong_answer += 1
-       percent = total_score / (total * 10) * 100
-       context['score'] = total_score
+       percent = (total_marks / total) * 100
+       # if request.user == UserProfile
+       # profile_user = user if user.active else user=None
+       # Result.objects.create(user=user, course_name=course, marks=total_marks, )
+       context['marks'] = total_marks
        context['time'] = request.POST.get('timer')
        context['correct'] = correct_answer
        context['wrong'] = wrong_answer
@@ -54,10 +62,11 @@ def quiz_test(request):
        context['percent'] = percent
 
        return render(request, 'quiz/result.html', context)
-   else:
-       questions = Quiz.objects.filter(active=True)
-       context['questions'] = questions
-       return render(request, 'quiz/quiz_test.html', context)
+
+   return render(request, 'quiz/quiz_test.html', context)
+
+
+
 
 def add_quiz(request):
     context={}
@@ -71,3 +80,11 @@ def add_quiz(request):
             return redirect('quiz_list')
     context['forms']=forms
     return render(request, 'quiz/add_quiz.html', context)
+
+
+# def quiz_test_by_course(request, id):
+#     course = Course.objects.get(id=id)
+#     quizs = Quiz.objects.filter(course_name=course)
+#     print(quizs, "Course wise quiz")
+#
+#     return redirect('home')
