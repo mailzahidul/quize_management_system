@@ -51,4 +51,4 @@ class Result(models.Model):
     comments = models.CharField(max_length=100, null=True)
 
     def __str__(self):
-        return self.question
+        return self.course_name.course_name

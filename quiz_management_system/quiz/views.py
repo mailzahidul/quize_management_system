@@ -4,6 +4,7 @@ from django.contrib.auth.models import User, Group
 from .forms import Quizform
 from .models import Quiz, Course, Semester, Result
 from user_admin.models import UserProfile
+from django.contrib import messages
 from user_admin.models import User as UUser
 from user_admin.forms import CreateUserProfileForm
 # Create your views here.
@@ -27,15 +28,24 @@ def quiz_list(request):
 @login_required
 def quiz_test(request, id):
    context={}
+   # profile_user = request.user
+   # u = UserProfile.objects.get(user=profile_user)
+   # print(profile_user, "request.same")
+   # print(u, "UserProfile object")
+   # if profile_user == UserProfile.objects.get(user=profile_user).user:
+   #     print("Same")
+   # else:
+   #     print("not same")
    course = Course.objects.get(id=id)
-   quizs = Quiz.objects.filter(course_name=course)
-   context['questions'] = quizs
+   questions = Quiz.objects.filter(course_name=course)
+   context['questions'] = questions
+   context['course'] = course
 
    if request.POST:
        print(request.POST, "All Input Answer")
        # questions = Quiz.objects.all()
-       course = Course.objects.get(id=id)
-       questions = Quiz.objects.filter(course_name=course)
+       # course = Course.objects.get(id=id)
+       # questions = Quiz.objects.filter(course_name=course)
        total_marks = 0
        wrong_answer = 0
        correct_answer = 0
@@ -51,17 +61,29 @@ def quiz_test(request, id):
            else:
                wrong_answer += 1
        percent = (total_marks / total) * 100
-       # if request.user == UserProfile
-       # profile_user = user if user.active else user=None
+       try:
+           profile_user = request.user
+           if profile_user == UserProfile.objects.get(user=profile_user).user:
+               user = UserProfile.objects.get(user=profile_user)
+               Result.objects.create(user=user, course_name=course, marks=total_marks, )
+               context['marks'] = total_marks
+               context['time'] = request.POST.get('timer')
+               context['correct'] = correct_answer
+               context['wrong'] = wrong_answer
+               context['total'] = total
+               context['percent'] = percent
+               return render(request, 'quiz/result.html', context)
+       except Exception as err:
+           messages.warning(request, f"{err}")
+       # user = UserProfile.objects.get(user=profile_user)
        # Result.objects.create(user=user, course_name=course, marks=total_marks, )
-       context['marks'] = total_marks
-       context['time'] = request.POST.get('timer')
-       context['correct'] = correct_answer
-       context['wrong'] = wrong_answer
-       context['total'] = total
-       context['percent'] = percent
-
-       return render(request, 'quiz/result.html', context)
+       # context['marks'] = total_marks
+       # context['time'] = request.POST.get('timer')
+       # context['correct'] = correct_answer
+       # context['wrong'] = wrong_answer
+       # context['total'] = total
+       # context['percent'] = percent
+       # return render(request, 'quiz/result.html', context)
 
    return render(request, 'quiz/quiz_test.html', context)
 
