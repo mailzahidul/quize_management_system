@@ -1,27 +1,25 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
+from .models import User
 # Create your views here.
 
 
 def user_registration(request):
-    if request.user.is_authenticated:
-        messages.success(request, "You have already an account...")
-        return redirect('home')
 
     if request.POST:
         fname = request.POST.get('first_name')
         lname = request.POST.get('last_name')
         email = request.POST.get('email')
-        username = request.POST.get('username')
+        # username = request.POST.get('username')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
         if password1 == password2:
-            user_check = authenticate(username=username, password=password1)
+            user_check = authenticate(email=email, password=password1)
             if user_check is None:
                 try:
-                    User.objects.create_user(first_name=fname, last_name=lname, email=email, username=username, password=password1)
+                    User.objects.create_staffuser(email=email, password=password1)
                     messages.success(request, "Sign Up Successfully, Login please")
                     return redirect('login')
                 except Exception as errors:
@@ -35,18 +33,20 @@ def user_registration(request):
 
 
 def user_login(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        if request.method == "POST":
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            user = authenticate(request, username=username, password=password)
+    if request.POST:
+        email = request.POST['email_id']
+        password = request.POST['password']
+        user = authenticate(email=email, password=password)
+        try:
             if user is not None:
                 login(request, user)
-                return redirect('/')
-        context = {}
-        return render(request, 'user/login.html', context)
+                return redirect('home')
+            else:
+                messages.error(request, 'Email or password incorrect.')
+        except Exception as err:
+            messages.error(request, f'{err}')
+
+    return render(request, 'user/login.html')
 
 
 def user_logout(request):

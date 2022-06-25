@@ -51,9 +51,8 @@
                                     <form class="user" method="POST" >
                                         {% csrf_token %}
                                         <div class="mb-3">
-                                            <input type="text" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp" name="username"
-                                                placeholder="Enter Username " required>
+                                            <input type="email" class="form-control form-control-user"
+                                                autocomplete="off" name="email_id" placeholder="Enter Your Email " required>
                                         </div>
                                         <div class="mb-3">
                                             <input type="password" class="form-control form-control-user"
