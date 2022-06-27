@@ -68,30 +68,29 @@
 
                             <form class="user" method="POST">
                                 {% csrf_token %}
-                                <div class="mb-3 row">
+                                {{ forms.as_p }}
+<!--                                <div class="mb-3 row">-->
 <!--                                    <div class="col-sm-6 mb-3 mb-sm-0">-->
 <!--                                        <input type="text" class="form-control form-control-user" id="exampleFirstName"-->
-<!--                                            placeholder="First Name" name='first_name' required>-->
+<!--                                            placeholder="First Name" name='f_name' required>-->
 <!--                                    </div>-->
 <!--                                    <div class="col-sm-6">-->
 <!--                                        <input type="text" class="form-control form-control-user" id="exampleLastName"-->
-<!--                                            placeholder="Last Name" name="last_name">-->
+<!--                                            placeholder="Last Name" name="l_name">-->
 <!--                                    </div>-->
-                                </div>
-                                <div class="mb-3">
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Email Address" name="email" required>
-                                </div>
+<!--                                </div>-->
+<!--                                <div class="mb-3">-->
+<!--                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"-->
+<!--                                        placeholder="Email Address" name="email" required>-->
+<!--                                </div>-->
                                 <div class="mb-3 row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <div class="col-sm-12">
+                                        <label>Confirm Password:</label>
                                         <input type="password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="Password" name="password1" required>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="password" class="form-control form-control-user"
-                                            id="exampleRepeatPassword" placeholder="Repeat Password" name="password2"
+                                            id="confirm_password" placeholder="Repeat Password" name="password2"
                                             required>
                                     </div>
+                                    <span id='message'></span>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100"> Sign Up</button>
                             </form>
@@ -121,7 +120,15 @@
 
     <!-- Custom scripts for all pages-->
     <!-- <script src="{% static 'js/sb-admin-2.min.js' %}"></script> -->
-
+    <script src="{% static '' %}assets/js/jquery-3.6.0.min.js"></script>
+<script>
+    $('#id_password, #confirm_password').on('keyup', function () {
+  if ($('#id_password').val() == $('#confirm_password').val()) {
+    $('#message').html('Password Matched').css('color', 'green');
+  } else
+    $('#message').html('No Password Matched').css('color', 'red');
+});
+</script>
 </body>
 
 </html>

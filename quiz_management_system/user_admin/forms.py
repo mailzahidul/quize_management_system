@@ -1,13 +1,25 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import UserProfile, User
 
 
-class createuserform(UserCreationForm):
+USER_TYPE= [
+    ('student', 'Student'),
+    ('teacher', 'Teacher')
+    ]
+
+
+class createuserform(forms.ModelForm):
+    user_type= forms.CharField(widget=forms.Select(choices=USER_TYPE))
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ('f_name', 'l_name', 'user_type','email', 'password')
+        widgets = {
+            'f_name' : forms.TextInput(attrs={'class':'form-control'}),
+            'l_name' : forms.TextInput(attrs={'class':'form-control'}),
+            'email' : forms.TextInput(attrs={'class':'form-control', 'type':'email', 'autocomplete':'off'}),
+            'password' : forms.TextInput(attrs={'class':'form-control'}),
+        }
 
 class CreateUserProfileForm(forms.ModelForm):
     class Meta:

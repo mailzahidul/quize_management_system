@@ -5,7 +5,7 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None, is_admin=False, is_staff=False, is_superuser=False, is_active=True):
+    def create_user(self, f_name, l_name, email, user_type=None, password=None, is_admin=False, is_staff=True, is_superuser=False, is_active=True):
         if not email:
             raise ValueError("User must have an email address")
         if not password:
@@ -14,6 +14,9 @@ class UserManager(BaseUserManager):
             email=self.normalize_email(email)
         )
         user_obj.set_password(password)
+        user_obj.f_name = f_name
+        user_obj.l_name = l_name
+        user_obj.user_type = user_type
         user_obj.is_admin = is_admin
         user_obj.is_active = is_active
         user_obj.is_staff = is_staff
@@ -21,11 +24,14 @@ class UserManager(BaseUserManager):
         user_obj.save(using=self._db)
         return user_obj
 
-    def create_staffuser(self, email, password=None):
+    def create_staffuser(self, f_name, l_name, email, password=None ):
         user = self.create_user(
-            email,
+            f_name = f_name,
+            l_name = l_name,
+            email = email,
             password=password,
-            is_staff=True
+            is_staff=True,
+            is_active=False
         )
         return user
 
@@ -42,13 +48,15 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
-    fast_name = models.CharField(max_length=60)
-    last_name = models.CharField(max_length=60)
+    f_name = models.CharField(max_length=60)
+    l_name = models.CharField(max_length=60)
+    user_type = models.CharField(max_length=60, default='student')
     phone = models.CharField(max_length=60)
     img = models.ImageField(upload_to='user', default='')
     password = models.CharField(max_length=90)
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
+    email_confirmed = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
