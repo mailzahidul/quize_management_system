@@ -21,7 +21,14 @@ class createuserform(forms.ModelForm):
             'password' : forms.TextInput(attrs={'class':'form-control', 'type':'password'}),
         }
 
-class CreateUserProfileForm(forms.ModelForm):
+
+class Permissionform(forms.ModelForm):
+    user_type= forms.CharField(widget=forms.Select(choices=USER_TYPE))
     class Meta:
-        model = UserProfile
-        fields = "__all__"
+        model = User
+        fields = ('user_type','active')
+        widgets = {
+            'f_name' : forms.TextInput(attrs={'class':'form-control'}),
+            'l_name' : forms.TextInput(attrs={'class':'form-control'}),
+            'email' : forms.TextInput(attrs={'class':'form-control', 'type':'email', 'autocomplete':'off'})
+        }

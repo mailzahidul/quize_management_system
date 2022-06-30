@@ -6,7 +6,6 @@ from .models import Quiz, Course, Semester, Result
 from user_admin.models import UserProfile
 from django.contrib import messages
 from user_admin.models import User as UUser
-from user_admin.forms import CreateUserProfileForm
 # Create your views here.
 
 @login_required

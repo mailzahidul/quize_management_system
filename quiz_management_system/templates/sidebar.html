@@ -21,6 +21,19 @@
                     <li>
                         <a href="{% url 'add_quiz' %}"><i data-feather="home"></i> <span>Add Quiz</span></a>
                     </li>
+
+<!--                    <li>-->
+<!--                        <a href="#"><i data-feather="home"></i> <span>Permission</span></a>-->
+<!--                    </li>-->
+                    {% if request.user.is_superuser %}
+                    <li class="submenu">
+                        <a href="#"><i data-feather="clipboard"></i> <span> Permission</span> <span
+                                class="menu-arrow"></span></a>
+                        <ul>
+                            <li><a href="{% url 'user-list' %}">User List</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
 <!--                    <p>below menu are dummy data</p>-->
 <!--                    <p>below menu are dummy data</p>-->
 <!--                    <p>below menu are dummy data</p>-->

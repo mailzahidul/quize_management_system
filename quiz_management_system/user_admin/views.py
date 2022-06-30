@@ -10,7 +10,7 @@ from .token import account_activation_token
 from django.utils.encoding import force_str
 from django.contrib.auth.models import Group
 from .models import User
-from .forms import createuserform
+from .forms import createuserform, Permissionform
 from django.utils.http import urlsafe_base64_decode
 from django.core.mail import send_mail
 # Create your views here.
@@ -92,3 +92,28 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('login')
+
+
+def user_list(request):
+    context={}
+    user_list = User.objects.filter(email_confirmed=True)
+    context['user_list'] = user_list
+    return render(request, 'user/user_list.html', context)
+
+
+def user_permission(request, id):
+    context={}
+    form = Permissionform()
+    context['form'] = form
+    user = User.objects.get(id=id)
+    if request.POST:
+        form = Permissionform(request.POST)
+        if form.is_valid():
+            user_type = form.cleaned_data['user_type']
+            active = form.cleaned_data['active']
+            group = Group.objects.get(name='student')
+            group.user_set.add(user)
+            user.active = True
+            user.save()
+            print(group, "View")
+    return render(request, 'user/user_permission.html', context)
