@@ -64,7 +64,7 @@ def quiz_test(request, id):
                context['wrong'] = wrong_answer
                context['total'] = total
                context['percent'] = percent
-               return render(request, 'quiz/result.html', context)
+               return render(request, 'quiz/instant_result.html', context)
        except Exception as err:
            messages.warning(request, f"{err}")
        # user = UserProfile.objects.get(user=profile_user)
@@ -75,7 +75,7 @@ def quiz_test(request, id):
        # context['wrong'] = wrong_answer
        # context['total'] = total
        # context['percent'] = percent
-       # return render(request, 'quiz/result.html', context)
+       # return render(request, 'quiz/instant_result.html', context)
 
    return render(request, 'quiz/quiz_test.html', context)
 
@@ -94,6 +94,14 @@ def add_quiz(request):
             return redirect('quiz_list')
     context['forms']=forms
     return render(request, 'quiz/add_quiz.html', context)
+
+
+def resutl_view(request):
+    context={}
+    user = request.user
+    results = Result.objects.filter(user=user)
+    context['results'] = results
+    return render(request, 'quiz/result.html', context)
 
 
 # def quiz_test_by_course(request, id):
