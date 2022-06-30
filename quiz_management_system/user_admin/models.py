@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.base_user import AbstractBaseUser
+# from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 
 
@@ -46,7 +47,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     f_name = models.CharField(max_length=60)
     l_name = models.CharField(max_length=60)
@@ -77,19 +78,3 @@ class User(AbstractBaseUser):
     @property
     def get_fullname(self):
         return self.fast_name + " " + self.last_name
-
-
-
-
-
-class Common(models.Model):
-    active = models.BooleanField(default=False)
-    create_date = models.DateField(auto_now_add=True)
-    modified_date = models.DateField(auto_now=True)
-
-
-class UserProfile(Common):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.user.email

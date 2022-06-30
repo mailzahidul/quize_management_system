@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from .forms import Quizform
 from .models import Quiz, Course, Semester, Result
-from user_admin.models import UserProfile
+from user_admin.models import User
 from django.contrib import messages
 from user_admin.models import User as UUser
 # Create your views here.
@@ -27,14 +27,6 @@ def quiz_list(request):
 @login_required
 def quiz_test(request, id):
    context={}
-   # profile_user = request.user
-   # u = UserProfile.objects.get(user=profile_user)
-   # print(profile_user, "request.same")
-   # print(u, "UserProfile object")
-   # if profile_user == UserProfile.objects.get(user=profile_user).user:
-   #     print("Same")
-   # else:
-   #     print("not same")
    course = Course.objects.get(id=id)
    questions = Quiz.objects.filter(course_name=course)
    context['questions'] = questions
@@ -62,8 +54,9 @@ def quiz_test(request, id):
        percent = (total_marks / total) * 100
        try:
            profile_user = request.user
-           if profile_user == UserProfile.objects.get(user=profile_user).user:
-               user = UserProfile.objects.get(user=profile_user)
+           if profile_user == User.objects.get(email=profile_user):
+               user = User.objects.get(email=profile_user)
+               print(user, "UUUUUUUUUUUUUU")
                Result.objects.create(user=user, course_name=course, marks=total_marks, )
                context['marks'] = total_marks
                context['time'] = request.POST.get('timer')

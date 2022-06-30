@@ -103,17 +103,17 @@ def user_list(request):
 
 def user_permission(request, id):
     context={}
-    form = Permissionform()
-    context['form'] = form
     user = User.objects.get(id=id)
+    form = Permissionform(instance = user)
+    context['form'] = form
     if request.POST:
-        form = Permissionform(request.POST)
+        form = Permissionform(request.POST, instance = user)
         if form.is_valid():
             user_type = form.cleaned_data['user_type']
             active = form.cleaned_data['active']
-            group = Group.objects.get(name='student')
+            group = Group.objects.get(name=user_type)
             group.user_set.add(user)
             user.active = True
             user.save()
-            print(group, "View")
+            return redirect('/accounts/user_list')
     return render(request, 'user/user_permission.html', context)
