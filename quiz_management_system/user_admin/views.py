@@ -44,11 +44,18 @@ def user_registration(request):
     if request.POST:
         forms = createuserform(request.POST)
         if forms.is_valid():
+            # f_name = forms.cleaned_data['f_name']
+            # l_name = forms.cleaned_data['l_name']
+            # email = forms.cleaned_data['email']
+            password = forms.cleaned_data['password']
+            # user_type = forms.cleaned_data['user_type']
+            # print(f_name, l_name, email, password, user_type, "ALLLLLLLLLLLLLLLLLLLLLLL")
             user = forms.save(commit=False)
             user.is_active = False # Deactivate account till it is confirmed
+            user.set_password(password)
             user.save()
             current_site = get_current_site(request)
-            subject = 'Activate Your MySite Account'
+            subject = 'Activate Your School Account'
             message = render_to_string('account_activation_email.html', {
                 'user': user,
                 'domain': current_site.domain,
@@ -58,26 +65,11 @@ def user_registration(request):
             to_email = forms.cleaned_data.get('email')
             send_mail(subject, message, 'mailzahidul@gmail.com', [to_email])
             # user.email_user(subject, message)
-
             messages.success(request, ('Please Confirm your email to complete registration.'))
-
             return redirect('login')
         else:
-            print(forms.errors)
-        # if password1 == password2:
-        #     user_check = authenticate(email=email, password=password1)
-        #     if user_check is None:
-        #         try:
-        #             User.objects.create_staffuser(email=email, password=password1)
-        #             messages.success(request, "Sign Up Successfully, Login please")
-        #             return redirect('login')
-        #         except Exception as errors:
-        #             messages.error(request, f" {errors}")
-        #     else:
-        #         messages.error(request, "Username Already Exist.")
-        # else:
-        #     messages.warning(request, "Password not match.")
-        # return render(request, 'user/registration.html')
+            messages.error(request, forms.errors)
+        return render(request, 'user/registration.html', context)
     return render(request, 'user/registration.html', context)
 
 
@@ -85,16 +77,15 @@ def user_login(request):
     if request.POST:
         email = request.POST['email_id']
         password = request.POST['password']
-        user = authenticate(email=email, password=password)
         try:
+            user = authenticate(email=email, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('home')
             else:
                 messages.error(request, 'Email or password incorrect.')
         except Exception as err:
-            messages.error(request, f'{err}')
-
+            print(err)
     return render(request, 'user/login.html')
 
 

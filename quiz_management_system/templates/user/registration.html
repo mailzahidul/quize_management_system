@@ -50,10 +50,10 @@
 
 
 
-                            {% if form.errors %}
+                            {% if forms.errors %}
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                <ul>
-                                   {% for field in form %}
+                                   {% for field in forms %}
                                    {% if field.errors %}
                                    <li>{{ field.label }}: {{ field.errors|striptags }}</li>
                                     <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
@@ -92,7 +92,7 @@
                                     </div>
                                     <span id='message'></span>
                                 </div>
-                                <button type="submit" class="btn btn-primary w-100"> Sign Up</button>
+                                <button id="signup" class="btn btn-primary w-100"> Sign Up</button>
                             </form>
                             <br>
                             <br>
@@ -125,6 +125,7 @@
     $('#id_password, #confirm_password').on('keyup', function () {
   if ($('#id_password').val() == $('#confirm_password').val()) {
     $('#message').html('Password Matched').css('color', 'green');
+    $('#signup').attr('type', 'submit');
   } else
     $('#message').html('No Password Matched').css('color', 'red');
 });

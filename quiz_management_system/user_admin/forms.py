@@ -18,7 +18,7 @@ class createuserform(forms.ModelForm):
             'f_name' : forms.TextInput(attrs={'class':'form-control'}),
             'l_name' : forms.TextInput(attrs={'class':'form-control'}),
             'email' : forms.TextInput(attrs={'class':'form-control', 'type':'email', 'autocomplete':'off'}),
-            'password' : forms.TextInput(attrs={'class':'form-control'}),
+            'password' : forms.TextInput(attrs={'class':'form-control', 'type':'password'}),
         }
 
 class CreateUserProfileForm(forms.ModelForm):

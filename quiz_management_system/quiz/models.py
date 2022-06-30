@@ -1,5 +1,5 @@
 from django.db import models
-from user_admin.models import UserProfile
+from user_admin.models import User
 # Create your models here.
 
 class Department(models.Model):
@@ -44,7 +44,7 @@ class Quiz(models.Model):
 
 
 class Result(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     course_name = models.ForeignKey(Course, on_delete=models.CASCADE)
     marks = models.IntegerField()
     exam_date = models.DateField(auto_now_add=True)
