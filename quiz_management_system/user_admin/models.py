@@ -6,7 +6,7 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, f_name, l_name, email, user_type=None, password=None, is_admin=False, is_staff=True, is_superuser=False, is_active=True):
+    def create_user(self, email, password=None, is_admin=False, is_staff=True, is_superuser=False, is_active=True):
         if not email:
             raise ValueError("User must have an email address")
         if not password:
@@ -15,9 +15,6 @@ class UserManager(BaseUserManager):
             email=self.normalize_email(email)
         )
         user_obj.set_password(password)
-        user_obj.f_name = f_name
-        user_obj.l_name = l_name
-        user_obj.user_type = user_type
         user_obj.is_admin = is_admin
         user_obj.is_active = is_active
         user_obj.is_staff = is_staff
@@ -25,10 +22,8 @@ class UserManager(BaseUserManager):
         user_obj.save(using=self._db)
         return user_obj
 
-    def create_staffuser(self, f_name, l_name, email, password=None ):
+    def create_staffuser(self, email, password=None ):
         user = self.create_user(
-            f_name = f_name,
-            l_name = l_name,
             email = email,
             password=password,
             is_staff=True,
@@ -67,6 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     objects = UserManager()
 
+
     def __str__(self):
         return self.email
 
@@ -77,4 +73,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         return True
     @property
     def get_fullname(self):
-        return self.fast_name + " " + self.last_name
+        return self.f_name + " " + self.l_name
